@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <style>
+      .bg { fill: #F7F8F9; }
+      .rule { stroke: #DFE3E7; stroke-width: 1.5; }
+      .kicker { font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 22px; letter-spacing: 3px; fill: #697887; text-transform: uppercase; font-weight: 500; }
+      .title { font-family: "Newsreader", Georgia, serif; font-size: 96px; font-weight: 400; fill: #343C44; letter-spacing: -1.5px; }
+      .accent { fill: #005459; }
+      .sub { font-family: "Newsreader", Georgia, serif; font-size: 34px; font-weight: 400; fill: #343C44; }
+      .num { font-family: "Figtree", system-ui, sans-serif; font-size: 18px; fill: #697887; letter-spacing: 2px; font-weight: 500; }
+      .label { font-family: "Figtree", system-ui, sans-serif; font-size: 22px; fill: #343C44; font-weight: 500; }
+      .label-accent { fill: #005459; }
+      .footer-text { font-family: "Figtree", system-ui, sans-serif; font-size: 20px; fill: #697887; letter-spacing: 1px; font-weight: 500; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1200" height="630" />
+
+  <!-- Tidal cresting-wave mark (top-left) -->
+  <g transform="translate(80, 60) scale(0.55)" fill="#005459">
+    <path d="M 13.219 46.419 C 13.219 38.292 15.259 32.572 18.217 32.572 C 20.077 32.572 21.423 34.157 21.423 38.352 C 21.423 46.053 18.488 51.398 14.317 55.281 C 13.605 52.435 13.221 49.465 13.221 46.419 L 13.219 46.419 Z M 83.725 27.993 C 82.017 27.993 80.637 28.832 79.866 29.435 C 79.809 29.479 79.729 29.518 79.655 29.518 C 79.448 29.518 79.358 29.339 79.402 29.141 C 79.706 27.702 80.243 24.687 80.243 21.293 C 80.243 15.256 77.13 11.443 73.121 11.443 C 70.251 11.443 68.435 13.262 67.514 14.59 C 67.452 14.681 67.372 14.749 67.246 14.749 C 67.04 14.749 66.962 14.577 66.985 14.382 C 67.104 13.374 67.233 11.978 67.233 10.624 C 67.233 4.252 64.177 0.008 59.722 0.008 C 55.268 0.008 53.168 3.592 52.188 6.871 C 52.147 7.014 52.041 7.118 51.892 7.118 C 51.742 7.118 51.652 6.999 51.621 6.843 C 51.077 4.072 49.382 0 44.58 0 C 40.453 0 36.886 2.412 35.784 10.655 C 33.847 25.139 30.412 29.594 30.412 32.666 C 30.412 34.111 31.291 35.119 32.834 35.119 C 34.376 35.119 35.818 33.261 37.061 29.864 C 38.996 24.586 40.845 16.638 41.549 11.019 C 42.044 7.069 43.249 5.775 44.812 5.775 C 46.571 5.775 47.553 7.537 47.553 11.183 C 47.553 24.224 44.525 29.391 44.525 34.059 C 44.525 35.353 45.506 36.66 46.976 36.66 C 51.456 36.66 54.205 22.608 55.786 11.986 C 56.457 7.48 57.556 5.788 59.253 5.788 C 60.95 5.788 62.278 7.311 62.278 11.321 C 62.278 19.461 60.282 28.349 58.556 34.121 C 57.695 37.003 57.228 39.295 57.228 40.649 C 57.228 42.003 58.208 43.251 59.681 43.251 C 63.519 43.251 66.774 32.783 69.013 21.784 C 69.745 18.187 70.896 17.08 72.275 17.08 C 73.774 17.08 74.929 18.496 74.973 21.438 C 74.978 28.759 72.598 38.201 69.418 45.307 C 68.133 48.176 67.457 49.839 67.457 51.1 C 67.457 52.36 68.438 53.701 69.908 53.701 C 72.626 53.701 75.925 48.768 79.237 37.645 C 80.137 34.62 80.986 33.557 82.386 33.557 C 83.629 33.557 84.793 34.373 84.793 37.042 C 84.793 51.684 70.491 80.387 45.201 80.387 C 32.037 80.387 21.421 72.416 16.383 61.256 C 22.006 56.472 27.002 49.036 27.002 38.835 C 27.002 31.686 24.353 26.854 18.591 26.854 C 11.534 26.854 7.395 35.532 7.395 46.934 C 7.395 51.11 8.05 55.182 9.257 59.029 C 7.235 60.245 5.109 61.266 3.002 62.153 C 1.279 62.875 0 63.522 0 65.586 C 0 66.779 1.016 67.808 2.711 67.808 C 4.663 67.808 7.97 66.779 11.524 64.707 C 17.652 77.213 30.082 86.159 45.201 86.159 C 71.829 86.159 90 57.953 90 37.357 C 90 31.548 87.643 27.993 83.717 27.993 L 83.725 27.993 Z" fill-rule="nonzero"/>
+  </g>
+
+  <text class="kicker" x="180" y="100">INTERNAL STRATEGY · DRAFT V1</text>
+
+  <text class="title" x="80" y="240">Navigate AI <tspan class="accent">Strategy</tspan></text>
+  <text class="sub" x="80" y="295">The agentic platform for Patient Journey Management.</text>
+
+  <g transform="translate(80, 380)">
+    <line class="rule" x1="0" y1="0" x2="1040" y2="0" />
+    <text class="num" x="0" y="40">01</text>  <text class="label" x="60" y="40">Product Vision</text>
+    <line class="rule" x1="0" y1="60" x2="1040" y2="60" />
+    <text class="num" x="0" y="100">02</text> <text class="label" x="60" y="100">Who AI Serves</text>
+    <line class="rule" x1="0" y1="120" x2="1040" y2="120" />
+    <text class="num" x="0" y="160">03</text> <text class="label label-accent" x="60" y="160">Our Differentiators</text>
+    <line class="rule" x1="0" y1="180" x2="1040" y2="180" />
+    <text class="num" x="0" y="220">04</text> <text class="label" x="60" y="220">Foundations</text>
+  </g>
+
+  <text class="footer-text" x="80" y="600">OWNER: TAYLOR STEIN · APR 24, 2026</text>
+</svg>

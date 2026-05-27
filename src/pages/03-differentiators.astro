@@ -1,0 +1,209 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Masthead from "../components/Masthead.astro";
+import PrevNextNav from "../components/PrevNextNav.astro";
+import PageFooter from "../components/PageFooter.astro";
+import { getSectionByOrder } from "../lib/sections";
+
+const section = await getSectionByOrder(3);
+if (!section) throw new Error("Differentiators section not found");
+
+const description = section.summary;
+const moats = section.moats ?? [];
+const argParas = section.argument.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+const evParas = section.evidence.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+---
+
+<Layout title={`${section.title} — Navigate AI Strategy`} description={description} atmosphere={section.atmosphere} position={section.order}>
+  <Masthead variant="inner" position={section.order} total={5} />
+
+  <article class="moats-page">
+    <header class="head">
+      <p class="section-numeral">{String(section.order).padStart(2, "0")} · {section.title}</p>
+      <h1 class="head-title">Five moats. Compounding.</h1>
+      <p class="head-lede">{section.summary}</p>
+      <div class="head-frame">
+        {argParas.map(p => <p>{p}</p>)}
+      </div>
+    </header>
+
+    <div class="stack">
+      {moats.map((m, i) => (
+        <section class="moat" style={`--depth: ${i};`}>
+          <div class="moat-num">{String(i + 1).padStart(2, "0")}</div>
+          <div class="moat-body">
+            <h2 class="moat-title">{m.title}</h2>
+            <p class="moat-text">{m.body}</p>
+          </div>
+          {i < moats.length - 1 && (
+            <div class="moat-arrow" aria-hidden="true">↓</div>
+          )}
+        </section>
+      ))}
+    </div>
+
+    <section class="footnote">
+      <h3 class="footnote-heading">Why compounding matters</h3>
+      {evParas.map(p => <p>{p}</p>)}
+    </section>
+  </article>
+
+  <PrevNextNav order={section.order} />
+  <PageFooter />
+</Layout>
+
+<style>
+  .moats-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 64px var(--space-8) 64px;
+  }
+
+  .head {
+    max-width: 760px;
+    margin-bottom: 64px;
+  }
+  .section-numeral {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-6) 0;
+  }
+  .head-title {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 96, "wght" 500;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.025em;
+    margin: 0 0 var(--space-4) 0;
+    color: var(--fg-heading);
+  }
+  .head-lede {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    line-height: 1.55;
+    color: var(--fg-primary);
+    margin: 0 0 var(--space-6) 0;
+    max-width: 58ch;
+  }
+  .head-frame p {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--fg-secondary);
+    margin: 0;
+    max-width: 60ch;
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-soft);
+  }
+
+  /* ============ STACKED MOATS ============ */
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: var(--space-8);
+  }
+  .moat {
+    --offset: calc(var(--depth) * 18px);
+    background: var(--surface-page);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-card);
+    padding: var(--space-8) var(--space-12);
+    margin-left: var(--offset);
+    margin-bottom: var(--space-4);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-8);
+    align-items: start;
+    position: relative;
+    box-shadow: var(--shadow-e1);
+    transition: transform var(--d-short) var(--ease-out), box-shadow var(--d-short) var(--ease-out);
+  }
+  .moat:hover {
+    transform: translateX(-4px);
+    box-shadow: var(--shadow-e2-button);
+  }
+
+  .moat-num {
+    font-family: var(--font-sans);
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--brand-primary);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    padding-top: 0.15em;
+    min-width: 2.5rem;
+  }
+
+  .moat-body { max-width: 64ch; }
+  .moat-title {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 36, "wght" 500;
+    font-size: 1.4rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 0 0 var(--space-3) 0;
+    color: var(--fg-heading);
+  }
+  .moat-text {
+    font-family: var(--font-sans);
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--fg-primary);
+    margin: 0;
+  }
+
+  .moat-arrow {
+    position: absolute;
+    bottom: calc(var(--space-4) * -1 - 8px);
+    left: var(--space-12);
+    font-family: var(--font-sans);
+    color: var(--border-strong);
+    font-size: 1rem;
+    z-index: 1;
+  }
+
+  .footnote {
+    margin-top: 64px;
+    max-width: 760px;
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--border-soft);
+  }
+  .footnote-heading {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-4) 0;
+    font-weight: 500;
+  }
+  .footnote p {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--fg-primary);
+    margin: 0;
+  }
+
+  @media (max-width: 720px) {
+    .moats-page { padding: var(--space-8) var(--space-6); }
+    .moat {
+      margin-left: 0;
+      padding: var(--space-6);
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+    .moat-arrow { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .moat { transform: none !important; }
+  }
+  @media print {
+    .moat { margin-left: 0; break-inside: avoid; }
+    .moat-arrow { display: none; }
+  }
+</style>

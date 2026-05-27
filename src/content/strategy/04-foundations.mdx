@@ -1,0 +1,37 @@
+---
+order: 4
+slug: foundations
+title: Foundations
+treatment: system-diagram
+atmosphere: foundations
+summary: |
+  Seven foundations make agents work: the patient journey data model, a shared agent substrate, AI configuration, the clinical knowledge layer, integration across every surface, context assembly, and model abstraction. These are the infrastructure the strategy depends on.
+argument: |
+  The foundations divide cleanly into two layers. The top layer is the **product surfaces** — what practices configure, what staff see, what the AI reasons against. The bottom layer is the **engineering infrastructure** — what makes the agents run, coordinate, and stay decoupled from any single model provider. Top-layer surfaces are where customers experience the platform; bottom-layer infrastructure is where engineering invests so the surfaces can compound.
+diagram:
+  productLayer:
+    - title: Patient journey data model
+      body: |
+        The structured definition of patient journeys — stages, milestones, readiness requirements, escalation paths, all configured as explicit objects. This makes us the system of record for the patient journey, and it's what our agents reason against.
+    - title: AI Configuration system
+      body: |
+        Where practices teach the AI everything that isn't in the journey map — protocols, SOPs, communication style, escalation policies, risk thresholds, edge cases. Ships with default playbooks; refines from outcome data over time.
+    - title: Clinical knowledge layer
+      body: |
+        The deep specialty expertise we've built over years, structured in a way AI can use — organized, tagged, machine-readable. EngagedMD curates this knowledge across every specialty we serve, and every customer benefits from it.
+  engineeringLayer:
+    - title: Shared substrate
+      body: |
+        The runtime store where agents read context and write observations about each patient. Every agent contributes; every agent reads from it. Coordination without a central orchestrator — agents share state rather than handing off directly.
+    - title: Agent integration
+      body: |
+        Agents need to live inside every part of the platform — Journey Manager core systems and journey applications. This is what lets agents run where staff already work.
+    - title: Context assembly
+      body: |
+        The engineering layer that pulls together everything an agent needs to know about a patient into a single coherent context. Quality of context determines quality of reasoning.
+    - title: Model abstraction
+      body: |
+        The engineering layer that lets us swap foundation models without rewriting our agents. Decouples our product from any single model provider so we can use the best model for each task and inherit improvements as the market evolves.
+evidence: |
+  Phase 1 (agent PoCs) stubs much of this; Phase 2 (production architecture) defines the real versions informed by what PoCs surface. We don't build the foundations in a vacuum — we build them as the agents demand them.
+---

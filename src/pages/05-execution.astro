@@ -1,0 +1,704 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Masthead from "../components/Masthead.astro";
+import PrevNextNav from "../components/PrevNextNav.astro";
+import PageFooter from "../components/PageFooter.astro";
+import { getSectionByOrder } from "../lib/sections";
+
+const section = await getSectionByOrder(5);
+if (!section) throw new Error("Execution section not found");
+
+const phases = section.phases ?? [];
+const parallel = section.parallel;
+const agentLibrary = section.agentLibrary;
+const featuredPoC = section.featuredPoC;
+const description = section.summary;
+const argParas = section.argument.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+const evParas = section.evidence.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+
+const statusLabels: Record<string, string> = {
+  live: "Live",
+  "in-progress": "In progress",
+  planned: "Planned",
+};
+
+const stakeholderGroups: Array<{ key: "staff" | "patients" | "admin"; heading: string }> = [
+  { key: "staff", heading: "For staff" },
+  { key: "patients", heading: "For patients" },
+  { key: "admin", heading: "For administrators" },
+];
+---
+
+<Layout title={`${section.title} — Navigate AI Strategy`} description={description} atmosphere={section.atmosphere} position={section.order}>
+  <Masthead variant="inner" position={section.order} total={5} />
+
+  <article class="execution">
+    <header class="head">
+      <p class="section-numeral">{String(section.order).padStart(2, "0")} · {section.title}</p>
+      <h1 class="head-title">Existing rails. AI work on them.</h1>
+      <p class="head-lede">{section.summary}</p>
+      <div class="head-frame">
+        {argParas.map(p => <p set:html={p.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")} />)}
+      </div>
+    </header>
+
+    <section class="timeline" aria-label="Execution timeline">
+      <p class="timeline-label">Phase rail</p>
+      <ol class="rail" role="list">
+        {phases.map((phase, i) => (
+          <li class="stop" style={`--idx: ${i};`}>
+            <div class="stop-marker" aria-hidden="true">
+              <div class="dot"></div>
+            </div>
+            <div class="stop-content">
+              <p class="phase-label">{phase.label}</p>
+              <h2 class="phase-title">{phase.title}</h2>
+              <p class="phase-body">{phase.body}</p>
+
+              {/* Phase 1: featured PoC hero, then the agent library. */}
+              {i === 0 && featuredPoC && (
+                <article class="featured-poc" data-status={featuredPoC.status}>
+                  <div class="featured-image" aria-hidden={featuredPoC.image ? "false" : "true"}>
+                    {featuredPoC.image ? (
+                      <img
+                        src={featuredPoC.image}
+                        alt={featuredPoC.imageAlt ?? ""}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <div class="featured-image-placeholder">
+                        <span>Live PoC</span>
+                      </div>
+                    )}
+                  </div>
+                  <div class="featured-body">
+                    <div class="featured-eyebrow-row">
+                      <p class="featured-eyebrow">{featuredPoC.eyebrow}</p>
+                      <span class={`status-chip status-${featuredPoC.status}`}>
+                        {statusLabels[featuredPoC.status]}
+                      </span>
+                    </div>
+                    <h3 class="featured-name">{featuredPoC.name}</h3>
+                    <p class="featured-text">{featuredPoC.body}</p>
+                    <div class="featured-links">
+                      {featuredPoC.url && (
+                        <a class="featured-primary" href={featuredPoC.url} target="_blank" rel="noopener">
+                          View live PoC <span aria-hidden="true">→</span>
+                        </a>
+                      )}
+                      {featuredPoC.crossLinkLabel && featuredPoC.crossLinkHref && (
+                        <a class="featured-cross" href={featuredPoC.crossLinkHref}>
+                          {featuredPoC.crossLinkLabel}
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              )}
+
+              {i === 0 && agentLibrary && (
+                <div class="agent-library" aria-label="Agent PoC library by stakeholder">
+                  {stakeholderGroups.map(group => {
+                    const agents = agentLibrary[group.key];
+                    if (!agents || agents.length === 0) return null;
+                    return (
+                      <section class="library-col" data-stakeholder={group.key}>
+                        <h3 class="library-col-heading">{group.heading}</h3>
+                        <div class="agent-cards">
+                          {agents.map(a => (
+                            <article class="agent-card" data-status={a.status}>
+                              <div class="agent-head">
+                                <h4 class="agent-name">{a.name}</h4>
+                                <span class={`status-chip status-${a.status}`}>{statusLabels[a.status]}</span>
+                              </div>
+                              <p class="agent-body">{a.body}</p>
+                              {a.url && (
+                                <a class="agent-link" href={a.url} target="_blank" rel="noopener">
+                                  View live PoC <span aria-hidden="true">→</span>
+                                </a>
+                              )}
+                            </article>
+                          ))}
+                        </div>
+                      </section>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Phase 2 (and any future phases): bulleted items, optionally
+                  with an "Questions to answer" heading and an "Output:" closer. */}
+              {i !== 0 && phase.items && phase.items.length > 0 && (
+                <>
+                  {phase.itemsHeading && (
+                    <p class="phase-items-heading">{phase.itemsHeading}</p>
+                  )}
+                  <ul class="phase-items">
+                    {phase.items.map(it => <li>{it}</li>)}
+                  </ul>
+                </>
+              )}
+              {i !== 0 && phase.output && (
+                <p class="phase-output">
+                  <strong>Output:</strong> {phase.output}
+                </p>
+              )}
+            </div>
+          </li>
+        ))}
+        <li class="stop ship">
+          <div class="stop-marker stop-marker-final" aria-hidden="true">
+            <div class="dot final"></div>
+          </div>
+          <div class="stop-content">
+            <p class="phase-label">Then</p>
+            <h2 class="phase-title">Ship. Repeat.</h2>
+            <p class="phase-body">
+              Once these are in motion, the strategy continues to play out through the
+              standard product processes — Greenlight bets and PI Planning — every
+              quarter, indefinitely.
+            </p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    {parallel && (
+      <section class="parallel" aria-label="Parallel commercial track">
+        <p class="parallel-label">{parallel.label}</p>
+        <h2 class="parallel-title">{parallel.title}</h2>
+        <p class="parallel-body">{parallel.body}</p>
+        {parallel.items && parallel.items.length > 0 && (
+          <ul class="parallel-items">
+            {parallel.items.map(it => <li>{it}</li>)}
+          </ul>
+        )}
+      </section>
+    )}
+
+    <section class="footnote">
+      <h3 class="footnote-heading">Each PoC must answer</h3>
+      {evParas.map(p => <p>{p}</p>)}
+    </section>
+  </article>
+
+  <PrevNextNav order={section.order} />
+  <PageFooter />
+</Layout>
+
+<style>
+  .execution {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 64px var(--space-8) 64px;
+  }
+
+  .head { max-width: 760px; margin-bottom: var(--space-12); }
+  .section-numeral {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-6) 0;
+  }
+  .head-title {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 96, "wght" 500;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.025em;
+    margin: 0 0 var(--space-4) 0;
+    color: var(--fg-heading);
+  }
+  .head-lede {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    line-height: 1.55;
+    color: var(--fg-primary);
+    margin: 0 0 var(--space-6) 0;
+    max-width: 60ch;
+  }
+  .head-frame p {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-4) 0;
+    max-width: 64ch;
+  }
+  .head-frame strong { color: var(--fg-heading); font-weight: 600; }
+
+  /* ============ TIMELINE ============ */
+  .timeline { margin-top: var(--space-12); }
+  .timeline-label {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-4) 0;
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .rail {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+  }
+  /* the vertical rail line */
+  .rail::before {
+    content: "";
+    position: absolute;
+    top: 1.25rem;
+    bottom: 1.25rem;
+    left: 14px;
+    width: 2px;
+    background: var(--brand-primary);
+    opacity: 0.45;
+  }
+  .stop {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: var(--space-8);
+    padding: var(--space-8) 0 var(--space-12);
+    position: relative;
+  }
+  .stop:last-child { padding-bottom: 0; }
+
+  .stop-marker {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 1.4rem;
+  }
+  .dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--surface-page);
+    border: 2.5px solid var(--brand-primary);
+    position: relative;
+    z-index: 1;
+    transition: background var(--d-short) var(--ease-out);
+  }
+  .stop:hover .dot { background: var(--brand-primary); }
+  .dot.final { background: var(--brand-primary); border-color: var(--brand-primary); }
+
+  .stop-content { padding-top: 0.4rem; }
+
+  .phase-label {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--brand-primary);
+    margin: 0 0 var(--space-1) 0;
+    font-weight: 500;
+  }
+  .phase-title {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 48, "wght" 500;
+    font-size: 1.65rem;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin: 0 0 var(--space-3) 0;
+    color: var(--fg-heading);
+  }
+  .phase-body {
+    font-family: var(--font-sans);
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--fg-primary);
+    margin: 0 0 var(--space-4) 0;
+    max-width: 60ch;
+  }
+  .phase-items-heading {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: var(--space-2) 0 var(--space-3) 0;
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--border-soft);
+    max-width: 60ch;
+  }
+  .phase-output {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--fg-primary);
+    margin: var(--space-4) 0 0 0;
+    max-width: 60ch;
+  }
+  .phase-output strong {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--brand-primary);
+    display: inline-block;
+    margin-right: var(--space-2);
+  }
+  .phase-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    max-width: 60ch;
+  }
+  .phase-items li {
+    font-family: var(--font-sans);
+    font-size: 0.96rem;
+    line-height: 1.5;
+    color: var(--fg-heading);
+    padding: var(--space-2) var(--space-4);
+    background: var(--surface-page);
+    border-left: 2px solid var(--border-strong);
+  }
+
+  /* ============ FEATURED PoC HERO (Phase 1) ============
+   * Singular, elevated card sitting above the agent library inside Phase 1.
+   * Used for foundation-level PoCs (currently: Patient Journey Mapping).
+   * Card spec: 16-radius, 1px border-soft, --shadow-e1. No colored left-border.
+   * Image at top in a 16:9 frame; body and links below.
+   */
+  .featured-poc {
+    background: var(--surface-page);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-e1);
+    overflow: hidden;
+    margin: var(--space-2) 0 var(--space-8);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .featured-image {
+    aspect-ratio: 16 / 9;
+    background: var(--surface-quiet);
+    border-bottom: 1px solid var(--border-soft);
+    overflow: hidden;
+    display: block;
+  }
+  .featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+  .featured-image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--brand-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .featured-image-placeholder span {
+    font-family: var(--font-sans);
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--brand-primary);
+  }
+
+  .featured-body {
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .featured-eyebrow-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+  .featured-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--brand-primary);
+    margin: 0;
+  }
+  .featured-name {
+    font-family: var(--font-sans);
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    color: var(--fg-heading);
+    margin: 0;
+  }
+  .featured-text {
+    font-family: var(--font-sans);
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--fg-primary);
+    margin: 0;
+    max-width: 64ch;
+  }
+  .featured-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    margin-top: var(--space-2);
+  }
+  .featured-primary {
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--brand-primary);
+    background: transparent;
+    padding: 8px 16px;
+    border: 1px solid var(--brand-primary);
+    border-radius: var(--radius-button);
+    border-bottom: 1px solid var(--brand-primary);
+    transition: background var(--d-short) var(--ease-out), color var(--d-short) var(--ease-out);
+  }
+  .featured-primary:hover {
+    background: var(--brand-primary);
+    color: var(--fg-on-brand);
+    border-color: var(--brand-primary);
+    border-bottom: 1px solid var(--brand-primary);
+  }
+  .featured-cross {
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--fg-secondary);
+    border-bottom: 1px solid transparent;
+  }
+  .featured-cross:hover {
+    color: var(--brand-primary);
+    border-bottom-color: currentColor;
+  }
+
+  @media (max-width: 640px) {
+    .featured-body { padding: var(--space-6); }
+    .featured-name { font-size: 1.35rem; }
+    .featured-links { gap: var(--space-3); }
+  }
+  @media print {
+    .featured-poc { break-inside: avoid; box-shadow: none; }
+  }
+
+  /* ============ AGENT PoC LIBRARY (Phase 1) ============
+   * 3-column stakeholder grid (staff/patients/admin). Each column stacks
+   * agent cards. Card spec: 16-radius, 1px border-soft, --shadow-e1.
+   * Status chips: 8-radius, semantic color, ALL CAPS.
+   */
+  .agent-library {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-4);
+  }
+  .library-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .library-col-heading {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-1) 0;
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .agent-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .agent-card {
+    background: var(--surface-page);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-e1);
+    padding: var(--space-4) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .agent-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .agent-name {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--fg-heading);
+    margin: 0;
+    flex: 1;
+  }
+  .agent-body {
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--fg-secondary);
+    margin: 0;
+  }
+  .agent-link {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--brand-primary);
+    border-bottom: none;
+    margin-top: var(--space-1);
+    transition: color var(--d-micro) var(--ease-out);
+  }
+  .agent-link:hover {
+    color: var(--brand-primary-hover);
+    border-bottom: 1px solid currentColor;
+  }
+
+  /* Status chips — 8-radius pill, semantic color per status. */
+  .status-chip {
+    flex-shrink: 0;
+    font-family: var(--font-sans);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: var(--radius-chip);
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+  .status-chip.status-live {
+    background: var(--success-soft);
+    color: var(--success-dark);
+  }
+  .status-chip.status-in-progress {
+    background: var(--info-soft);
+    color: var(--info-dark);
+  }
+  .status-chip.status-planned {
+    background: var(--surface-quiet);
+    color: var(--fg-secondary);
+  }
+
+  @media (max-width: 640px) {
+    .agent-library { grid-template-columns: 1fr; }
+  }
+  @media print {
+    .agent-card { break-inside: avoid; box-shadow: none; }
+  }
+
+  /* ============ PARALLEL TRACK ============
+   * Card per brand spec: 16-radius, 1px divider stroke, --shadow-e1. No left-border accent. */
+  .parallel {
+    margin-top: 64px;
+    padding: var(--space-12) var(--space-8);
+    background: var(--surface-page);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-e1);
+    position: relative;
+  }
+  .parallel-label {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--brand-primary);
+    margin: 0 0 var(--space-1) 0;
+    font-weight: 500;
+  }
+  .parallel-title {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 48, "wght" 500;
+    font-size: 1.65rem;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin: 0 0 var(--space-3) 0;
+    color: var(--fg-heading);
+  }
+  .parallel-body {
+    font-family: var(--font-sans);
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--fg-primary);
+    margin: 0 0 var(--space-4) 0;
+    max-width: 60ch;
+  }
+  .parallel-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .parallel-items li {
+    font-family: var(--font-sans);
+    font-size: 0.96rem;
+    line-height: 1.5;
+    color: var(--fg-primary);
+    padding-left: var(--space-4);
+    position: relative;
+  }
+  .parallel-items li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--fg-secondary);
+  }
+
+  .footnote {
+    margin-top: 64px;
+    max-width: 800px;
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--border-soft);
+  }
+  .footnote-heading {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-4) 0;
+    font-weight: 500;
+  }
+  .footnote p {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--fg-primary);
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .execution { padding: var(--space-8) var(--space-6); }
+    .stop { gap: var(--space-6); }
+    .parallel { padding: var(--space-6); }
+  }
+  @media print {
+    .stop { break-inside: avoid; }
+    .parallel { break-inside: avoid; background: white; }
+  }
+</style>

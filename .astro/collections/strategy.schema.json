@@ -1,0 +1,372 @@
+{
+  "$ref": "#/definitions/strategy",
+  "definitions": {
+    "strategy": {
+      "type": "object",
+      "properties": {
+        "order": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "slug": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "treatment": {
+          "type": "string",
+          "enum": [
+            "manifesto",
+            "triptych",
+            "stacked-moats",
+            "system-diagram",
+            "timeline"
+          ]
+        },
+        "atmosphere": {
+          "type": "string",
+          "enum": [
+            "vision",
+            "who",
+            "differentiators",
+            "foundations",
+            "execution"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        },
+        "argument": {
+          "type": "string"
+        },
+        "evidence": {
+          "type": "string"
+        },
+        "evidenceLink": {
+          "type": "string",
+          "format": "uri"
+        },
+        "panels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label",
+              "title",
+              "body"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "moats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "body"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "diagram": {
+          "type": "object",
+          "properties": {
+            "productLayer": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "body"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "engineeringLayer": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "body"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "productLayer",
+            "engineeringLayer"
+          ],
+          "additionalProperties": false
+        },
+        "phases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              },
+              "itemsHeading": {
+                "type": "string"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "output": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label",
+              "title",
+              "body"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "parallel": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "body": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "label",
+            "title",
+            "body"
+          ],
+          "additionalProperties": false
+        },
+        "featuredPoC": {
+          "type": "object",
+          "properties": {
+            "eyebrow": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "body": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "live",
+                "in-progress",
+                "planned"
+              ]
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "image": {
+              "type": "string"
+            },
+            "imageAlt": {
+              "type": "string"
+            },
+            "crossLinkLabel": {
+              "type": "string"
+            },
+            "crossLinkHref": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "eyebrow",
+            "name",
+            "body",
+            "status"
+          ],
+          "additionalProperties": false
+        },
+        "agentLibrary": {
+          "type": "object",
+          "properties": {
+            "staff": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "live",
+                      "in-progress",
+                      "planned"
+                    ]
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                },
+                "required": [
+                  "name",
+                  "body",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "patients": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "live",
+                      "in-progress",
+                      "planned"
+                    ]
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                },
+                "required": [
+                  "name",
+                  "body",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "admin": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "live",
+                      "in-progress",
+                      "planned"
+                    ]
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                },
+                "required": [
+                  "name",
+                  "body",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "staff",
+            "patients",
+            "admin"
+          ],
+          "additionalProperties": false
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "order",
+        "slug",
+        "title",
+        "treatment",
+        "atmosphere",
+        "summary",
+        "argument",
+        "evidence"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

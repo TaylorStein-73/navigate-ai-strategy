@@ -1,0 +1,82 @@
+---
+order: 5
+slug: execution
+title: How We Execute
+treatment: timeline
+atmosphere: execution
+summary: |
+  Existing processes carry the strategy. AI bets go through Greenlight (each must show strategy alignment) and PI Planning (competing against other work). We track AI bets specifically with a goal of shipping at least one AI bet per quarter.
+argument: |
+  Our existing product processes cover this — we don't need a parallel AI process, we need AI work to compete and ship inside the system we already run.
+
+  **Greenlight bets.** AI-related bets go through the standard Greenlight process. Each bet must reference this strategy and show alignment with it. Bets that don't advance the strategy don't get approved.
+
+  **PI Planning.** AI-related bets go through the standard PI Planning process and compete for capacity against other strategic and incremental work. We track AI-related bets specifically, with a goal of shipping at least one AI bet every quarter.
+phases:
+  - label: Phase 1
+    title: Agent PoCs
+    body: |
+      Build PoCs of multiple agents to prove that our patient journey data, practice configuration, and specialty clinical knowledge can produce differentiated experiences. We don't need to PoC everything before moving to Phase 2 — architecture unlocks once we have enough understanding of the requirements. Build sequence per agent: instructions only → clinic-specific files → patient context → build from there.
+  - label: Phase 2
+    title: Production architecture planning
+    body: |
+      Once we have a few PoCs in flight, take stock of what's worth building as shared production architecture vs. what can stay agent-specific. Make a plan. Pressure-test the plan with the team and customers before committing engineering capacity.
+    itemsHeading: Questions to answer
+    items:
+      - What did the PoCs teach us about what agents actually need from shared infrastructure?
+      - Which Foundations capabilities (data model, shared substrate, configuration, knowledge layer, context assembly, model abstraction, evals) need to be built up front, and which can be deferred?
+      - What's the right sequence, given that we want agents in customers' hands as fast as possible?
+    output: |
+      A production architecture plan that names what we'll build, in what order, and why — grounded in PoC learnings rather than guesses.
+parallel:
+  label: In parallel
+  title: Commercial track
+  body: |
+    Naming and positioning, pricing strategy, sales motion thinking can start now and evolves as the product takes shape.
+  items:
+    - Naming and positioning for AI features
+    - Pricing — within tiers, as add-ons, usage-based, or something else
+    - Sales motion — who pitches, how they fit existing deal flows
+featuredPoC:
+  eyebrow: FOUNDATION IN FLIGHT
+  name: Patient Journey Mapping interface
+  body: |
+    Where clinic admins configure their patient journeys — stages, milestones, readiness requirements, escalation paths. This is the live interface to the patient journey data model itself: the structured definition the agents reason against. It's not an agent — it's the foundation underneath them.
+  status: live
+  url: https://pjm-v0.vercel.app/
+  image: /pocs/journey-mapping.png
+  imageAlt: Screenshot of the Patient Journey Mapping interface, showing a configured patient journey with stages and milestones
+  crossLinkLabel: See the patient journey data model →
+  crossLinkHref: /04-foundations
+agentLibrary:
+  staff:
+    - name: Daily rounds agent
+      body: Reviews every active patient daily; surfaces who needs attention and why. Catches stalling patients, readiness gaps, and risks no human can track at scale.
+      status: in-progress
+    - name: Messaging response agent
+      body: Drafts replies to patient messages using the patient's full context, the message thread, and the practice's templates and voice.
+      status: planned
+    - name: Nurture agent
+      body: Proactive outreach to stalled or at-risk patients. Drafts personalized check-ins designed to re-engage rather than nag.
+      status: planned
+    - name: Intake triage agent
+      body: Pre-fills intake with what we already know, asks only what we don't, flags discrepancies between patient-reported and clinical data, routes patients based on what they share.
+      status: planned
+    - name: Ambient scribe
+      body: Listens during clinical encounters, drafts structured notes for staff review.
+      status: live
+      url: https://ambient-scribe-prototype.vercel.app/
+  patients:
+    - name: Patient experience personalization agent
+      body: Adapts each patient's portal experience to where they are in their journey, what they need next, and how they engage best.
+      status: planned
+    - name: Patient Q&A agent
+      body: Answers patient questions directly using their context, their journey, and the practice's clinical knowledge — instead of making them wait for a coordinator.
+      status: live
+  admin:
+    - name: Insight agent
+      body: Surfaces patterns across patients, stages, and outcomes for clinic administrators — where journeys are leaking, what's working, what to redesign.
+      status: planned
+evidence: |
+  Each PoC answers three questions: does the agent produce outputs that staff or patients trust and use; can we measure the gain in time, accuracy, or experience; and what did we learn about the data and infrastructure we'll need in Phase 2.
+---

@@ -1,0 +1,370 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Masthead from "../components/Masthead.astro";
+import PrevNextNav from "../components/PrevNextNav.astro";
+import PageFooter from "../components/PageFooter.astro";
+import { getSectionByOrder } from "../lib/sections";
+
+const section = await getSectionByOrder(4);
+if (!section) throw new Error("Foundations section not found");
+const { productLayer = [], engineeringLayer = [] } = section.diagram ?? {};
+
+const description = section.summary;
+const argParas = section.argument.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+const evParas = section.evidence.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+
+// SVG diagram geometry
+const productBoxWidth = 220;
+const engBoxWidth = 165;
+const boxHeight = 70;
+const productGap = 28;
+const engGap = 24;
+const productTotal = productBoxWidth * productLayer.length + productGap * (productLayer.length - 1);
+const engTotal = engBoxWidth * engineeringLayer.length + engGap * (engineeringLayer.length - 1);
+const svgWidth = Math.max(productTotal, engTotal) + 80;
+const layerGap = 110;
+const svgHeight = 80 + boxHeight + layerGap + boxHeight + 60;
+
+const productY = 60;
+const engY = productY + boxHeight + layerGap;
+const productStartX = (svgWidth - productTotal) / 2;
+const engStartX = (svgWidth - engTotal) / 2;
+---
+
+<Layout title={`${section.title} — Navigate AI Strategy`} description={description} atmosphere={section.atmosphere} position={section.order}>
+  <Masthead variant="inner" position={section.order} total={5} />
+
+  <article class="foundations">
+    <header class="head">
+      <p class="section-numeral">{String(section.order).padStart(2, "0")} · {section.title}</p>
+      <h1 class="head-title">The system, drawn.</h1>
+      <p class="head-lede">{section.summary}</p>
+      <div class="head-frame">
+        {argParas.map(p => <p set:html={p.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")} />)}
+      </div>
+    </header>
+
+    <figure class="diagram" aria-labelledby="diagram-caption">
+      <svg
+        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+        width="100%"
+        height="auto"
+        role="img"
+        aria-label="Two-layer system diagram. Top layer: three product surfaces. Bottom layer: four engineering infrastructure components. Connectors show the engineering layer supports all product surfaces."
+      >
+        <!-- background grid lines (very subtle blueprint feel) -->
+        <defs>
+          <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#DFE3E7" stroke-width="0.5" opacity="0.6"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- layer labels -->
+        <text x="20" y={productY + boxHeight / 2 + 4} class="layer-label" text-anchor="start">PRODUCT SURFACES</text>
+        <text x="20" y={engY + boxHeight / 2 + 4} class="layer-label" text-anchor="start">ENGINEERING INFRA</text>
+
+        <!-- engineering layer rail (the support beam) -->
+        <line
+          x1={engStartX - 12}
+          y1={engY - 20}
+          x2={engStartX + engTotal + 12}
+          y2={engY - 20}
+          stroke="#005459"
+          stroke-width="1.5"
+          stroke-dasharray="4 4"
+          opacity="0.6"
+        />
+
+        <!-- product boxes (top layer) -->
+        {productLayer.map((item, i) => {
+          const x = productStartX + i * (productBoxWidth + productGap);
+          const cx = x + productBoxWidth / 2;
+          return (
+            <g class="product-box">
+              <rect
+                x={x}
+                y={productY}
+                width={productBoxWidth}
+                height={boxHeight}
+                fill="#ffffff"
+                stroke="#005459"
+                stroke-width="2"
+                rx="4"
+              />
+              <text
+                x={cx}
+                y={productY + boxHeight / 2 + 4}
+                text-anchor="middle"
+                class="box-label"
+              >{item.title}</text>
+              <!-- connector down toward engineering rail -->
+              <line
+                x1={cx}
+                y1={productY + boxHeight}
+                x2={cx}
+                y2={engY - 20}
+                stroke="#005459"
+                stroke-width="1.5"
+                opacity="0.6"
+              />
+            </g>
+          );
+        })}
+
+        <!-- engineering boxes (bottom layer) -->
+        {engineeringLayer.map((item, i) => {
+          const x = engStartX + i * (engBoxWidth + engGap);
+          const cx = x + engBoxWidth / 2;
+          return (
+            <g class="eng-box">
+              <line
+                x1={cx}
+                y1={engY - 20}
+                x2={cx}
+                y2={engY}
+                stroke="#005459"
+                stroke-width="1.5"
+                opacity="0.6"
+              />
+              <rect
+                x={x}
+                y={engY}
+                width={engBoxWidth}
+                height={boxHeight}
+                fill="#FFF2E3"
+                stroke="#697887"
+                stroke-width="1.5"
+                rx="4"
+              />
+              <text
+                x={cx}
+                y={engY + boxHeight / 2 + 4}
+                text-anchor="middle"
+                class="box-label eng"
+              >{item.title}</text>
+            </g>
+          );
+        })}
+      </svg>
+
+      <figcaption id="diagram-caption">
+        <strong>Two-layer system.</strong> Product surfaces (top) are what customers configure and what staff see.
+        Engineering infrastructure (bottom) is what makes the agents run, coordinate, and stay decoupled
+        from any single model provider. Every product surface reads from and writes to the engineering rail —
+        which is how agents coordinate without a central orchestrator.
+      </figcaption>
+    </figure>
+
+    <section class="layer-details">
+      <div class="layer-group">
+        <h2 class="layer-heading">Product surfaces</h2>
+        <ol class="component-list">
+          {productLayer.map((c, i) => (
+            <li>
+              <span class="comp-num">P{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <h3 class="comp-title">{c.title}</h3>
+                <p class="comp-body">{c.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div class="layer-group">
+        <h2 class="layer-heading">Engineering infrastructure</h2>
+        <ol class="component-list">
+          {engineeringLayer.map((c, i) => (
+            <li>
+              <span class="comp-num eng">E{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <h3 class="comp-title">{c.title}</h3>
+                <p class="comp-body">{c.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="footnote">
+      <h3 class="footnote-heading">Build sequence</h3>
+      {evParas.map(p => <p>{p}</p>)}
+    </section>
+  </article>
+
+  <PrevNextNav order={section.order} />
+  <PageFooter />
+</Layout>
+
+<style>
+  .foundations {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 64px var(--space-8) 64px;
+  }
+
+  .head { max-width: 760px; margin-bottom: var(--space-12); }
+  .section-numeral {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-6) 0;
+  }
+  .head-title {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 96, "wght" 500;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.025em;
+    margin: 0 0 var(--space-4) 0;
+    color: var(--fg-heading);
+  }
+  .head-lede {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    line-height: 1.55;
+    color: var(--fg-primary);
+    margin: 0 0 var(--space-6) 0;
+    max-width: 60ch;
+  }
+  .head-frame p {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-4) 0;
+    max-width: 64ch;
+  }
+  .head-frame strong { color: var(--fg-heading); font-weight: 600; }
+
+  /* ============ DIAGRAM ============ */
+  .diagram {
+    margin: var(--space-12) 0 64px;
+    padding: var(--space-8) var(--space-6);
+    background: white;
+    border: 1px solid var(--border-strong);
+  }
+  .diagram svg :global(.layer-label) {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    fill: #697887;
+    font-weight: 500;
+  }
+  .diagram svg :global(.box-label) {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 500;
+    fill: var(--fg-heading);
+  }
+  .diagram svg :global(.box-label.eng) { fill: var(--fg-primary); }
+  .diagram svg :global(g.product-box) { transition: opacity var(--d-short) var(--ease-out); }
+  .diagram svg :global(g.product-box):hover { opacity: 0.85; }
+  .diagram svg :global(g.eng-box) { transition: opacity var(--d-short) var(--ease-out); }
+  .diagram svg :global(g.eng-box):hover { opacity: 0.85; }
+
+  figcaption {
+    margin-top: var(--space-4);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--fg-secondary);
+    max-width: 80ch;
+  }
+  figcaption strong { color: var(--fg-heading); font-weight: 600; }
+
+  /* ============ LAYER DETAILS ============ */
+  .layer-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    margin-top: var(--space-12);
+  }
+  .layer-heading {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--brand-primary);
+    margin: 0 0 var(--space-4) 0;
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border-soft);
+    font-weight: 500;
+  }
+  .component-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+  .component-list li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-4);
+    align-items: start;
+  }
+  .comp-num {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    color: var(--brand-primary);
+    font-weight: 500;
+    padding-top: 0.2em;
+  }
+  .comp-num.eng { color: var(--fg-secondary); }
+  .comp-title {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 24, "wght" 500;
+    font-size: 1.05rem;
+    line-height: 1.25;
+    margin: 0 0 var(--space-2) 0;
+    color: var(--fg-heading);
+  }
+  .comp-body {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--fg-primary);
+    margin: 0;
+  }
+
+  .footnote {
+    margin-top: 64px;
+    max-width: 800px;
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--border-soft);
+  }
+  .footnote-heading {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-4) 0;
+    font-weight: 500;
+  }
+  .footnote p {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--fg-primary);
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .layer-details { grid-template-columns: 1fr; gap: var(--space-12); }
+  }
+  @media (max-width: 640px) {
+    .foundations { padding: var(--space-8) var(--space-6); }
+    .diagram { padding: var(--space-4) var(--space-2); }
+  }
+  @media print {
+    .diagram { break-inside: avoid; }
+  }
+</style>

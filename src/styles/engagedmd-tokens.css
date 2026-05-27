@@ -1,0 +1,212 @@
+/* =================================================================
+   EngagedMD — Tidal Design System
+   Color + Type Tokens
+   ================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500;6..72,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=block');
+
+:root {
+  /* ─── Brand ──────────────────────────────────────────────────── */
+  --brand-primary:        #005459; /* MUI primary.main — EMD dark teal */
+  --brand-primary-hover:  #004045;
+  --brand-primary-press:  #003237;
+  --brand-secondary:      #FFF2E3; /* MUI secondary.main — cream (text inside = primary) */
+  --brand-secondary-on:   #005459;
+  --brand-accent:         #DF499F; /* magenta (legacy v1 app) — active-nav indicator + unread dot */
+  --brand-accent-soft:    #FBE6F1;
+
+  /* ─── Semantic / status (MUI Tidal v1.2 palette) ─────────────── */
+  --info:                 #0D8CC5; /* sky blue */
+  --info-dark:            #0072A1;
+  --info-soft:            #F2F9FE;
+  --success:              #00A29A; /* teal-cyan (chip/badge) */
+  --success-dark:         #00857E;
+  --success-soft:         #E0F5F3;
+  --warning:              #FA9F42; /* orange */
+  --warning-dark:         #EF6C00; /* used as warning chip icon */
+  --warning-soft:         #FFF6EE;
+  --error:                #C43442; /* red */
+  --error-dark:           #A0202C;
+  --error-soft:           #FFF6F5;
+
+  /* ─── Neutral surfaces / strokes ─────────────────────────────── */
+  --surface-app:          #F7F8F9; /* app shell / page wrapper bg */
+  --surface-page:         #FFFFFF; /* content area bg */
+  --surface-muted:        #F5F8F8;
+  --surface-quiet:        #F0F1F3;
+  --surface-disabled:     #EBEDF0;
+
+  --divider:              rgba(0, 0, 0, 0.12);
+  --border-soft:          #DFE3E7;
+  --border-strong:        #5E6C7A;
+
+  /* ─── Text ───────────────────────────────────────────────────── */
+  --fg-primary:           #343C44; /* default body — slate */
+  --fg-strong:            rgba(0, 0, 0, 0.87); /* MUI text.primary */
+  --fg-secondary:         #697887; /* secondary text */
+  --fg-tertiary:          #A2ADB7; /* hint / placeholder */
+  --fg-on-brand:          #FFFFFF;
+  --fg-on-info:           #FFFFFF;
+  --fg-link:              var(--brand-primary);
+  --fg-heading:           #343C44;
+  --fg-heading-dark-teal: #005459;
+  --fg-navy:              #172B4D; /* legacy MUI body */
+
+  /* ─── Elevation (MUI) ────────────────────────────────────────── */
+  --shadow-e1:
+      0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+      0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  --shadow-e2-button:
+      0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  --shadow-e6-drawer:
+      0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0px 6px 10px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  --shadow-e16-menu:
+      0px 8px 10px -5px rgba(0, 0, 0, 0.2),
+      0px 16px 24px 2px rgba(0, 0, 0, 0.14),
+      0px 6px 30px 5px rgba(0, 0, 0, 0.12);
+  --shadow-e24-modal:
+      0px 11px 15px -7px rgba(0, 0, 0, 0.2),
+      0px 24px 38px 3px rgba(0, 0, 0, 0.14),
+      0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+  --shadow-screenshot: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); /* used on figma "screenshot" frames */
+
+  /* ─── Radii ──────────────────────────────────────────────────── */
+  --radius-button:        4px;
+  --radius-chip:          8px;
+  --radius-card:          16px;
+  --radius-image:         16px;
+  --radius-avatar:        50%;
+
+  /* ─── Spacing (MUI 8-pt) ─────────────────────────────────────── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* ─── Layout ─────────────────────────────────────────────────── */
+  --rail-width: 260px;
+  --page-max: 900px;
+
+  /* ─── Type families ──────────────────────────────────────────── */
+  --font-sans:    'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;       /* headings + body */
+  --font-mui:     'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;        /* buttons, chips, tables — MUI default */
+  --font-ui:      'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;          /* legacy micro */
+  /* NOTE: --font-display is a Newsreader substitute for paid Recoleta. Swap once Recoleta is provided. */
+  --font-display: 'Newsreader', 'Recoleta', Georgia, 'Times New Roman', serif;
+
+  /* ─── Type scale (MUI variants used in Tidal) ────────────────── */
+  /* h1 (cover hero): Recoleta Light 96 / 112 */
+  --type-h1-font:        var(--font-display);
+  --type-h1-weight:      300;
+  --type-h1-size:        96px;
+  --type-h1-line:        1.167;
+  --type-h1-track:       -1.5px;
+
+  /* h2 reserved */
+
+  /* h3 cover wordmark / module title: Recoleta 48 / 56 */
+  --type-h3-font:        var(--font-display);
+  --type-h3-weight:      400;
+  --type-h3-size:        48px;
+  --type-h3-line:        1.167;
+  --type-h3-track:       0;
+
+  /* h4 page hero: Recoleta 34 / 42 */
+  --type-h4-font:        var(--font-display);
+  --type-h4-weight:      400;
+  --type-h4-size:        34px;
+  --type-h4-line:        1.235;
+  --type-h4-track:       0.25px;
+
+  /* h5 page header: Figtree 24 / 32 */
+  --type-h5-font:        var(--font-sans);
+  --type-h5-weight:      600;
+  --type-h5-size:        24px;
+  --type-h5-line:        1.334;
+  --type-h5-track:       0;
+
+  /* h6 card titles / dialog titles: Figtree Medium 20 / 32 */
+  --type-h6-font:        var(--font-sans);
+  --type-h6-weight:      500;
+  --type-h6-size:        20px;
+  --type-h6-line:        1.6;
+  --type-h6-track:       0.15px;
+
+  /* body1 default paragraph: Figtree 16 / 24 */
+  --type-body1-font:     var(--font-sans);
+  --type-body1-weight:   400;
+  --type-body1-size:     16px;
+  --type-body1-line:     1.5;
+  --type-body1-track:    0.15px;
+
+  /* body2 secondary: Figtree 14 / 20 */
+  --type-body2-font:     var(--font-sans);
+  --type-body2-weight:   400;
+  --type-body2-size:     14px;
+  --type-body2-line:     1.43;
+  --type-body2-track:    0.17px;
+
+  /* caption micro: Inter Medium 12 / 20 */
+  --type-caption-font:   var(--font-ui);
+  --type-caption-weight: 500;
+  --type-caption-size:   12px;
+  --type-caption-line:   1.66;
+  --type-caption-track:  0.4px;
+
+  /* button label: Roboto Medium 14 / 24 — MUI default for buttons */
+  --type-button-font:    var(--font-mui);
+  --type-button-weight:  500;
+  --type-button-size:    14px;
+  --type-button-line:    24px;
+  --type-button-track:   0.4px;
+
+  /* chip label: Roboto 13 / 18 — MUI default for chips */
+  --type-chip-font:      var(--font-mui);
+  --type-chip-weight:    400;
+  --type-chip-size:      13px;
+  --type-chip-line:      18px;
+  --type-chip-track:     0.16px;
+
+  /* overline / eyebrow ALL CAPS: Figtree 15.75 / 24 */
+  --type-overline-font:  var(--font-sans);
+  --type-overline-weight:400;
+  --type-overline-size:  14px;
+  --type-overline-line:  1.5;
+  --type-overline-track: 1px;
+}
+
+/* ─── Semantic element defaults ─────────────────────────────────── */
+html { color: var(--fg-strong); background: var(--surface-page); }
+body { margin: 0; font-family: var(--font-sans); font-size: var(--type-body1-size); line-height: var(--type-body1-line); color: var(--fg-primary); }
+
+h1 { font-family: var(--type-h1-font); font-weight: var(--type-h1-weight); font-size: var(--type-h1-size); line-height: var(--type-h1-line); letter-spacing: var(--type-h1-track); margin: 0; color: var(--fg-heading); }
+h2, h3 { font-family: var(--type-h3-font); font-weight: var(--type-h3-weight); font-size: var(--type-h3-size); line-height: var(--type-h3-line); letter-spacing: var(--type-h3-track); margin: 0; color: var(--fg-heading); }
+h4 { font-family: var(--type-h4-font); font-weight: var(--type-h4-weight); font-size: var(--type-h4-size); line-height: var(--type-h4-line); letter-spacing: var(--type-h4-track); margin: 0; color: var(--fg-heading); }
+h5 { font-family: var(--type-h5-font); font-weight: var(--type-h5-weight); font-size: var(--type-h5-size); line-height: var(--type-h5-line); margin: 0; color: var(--fg-heading); }
+h6 { font-family: var(--type-h6-font); font-weight: var(--type-h6-weight); font-size: var(--type-h6-size); line-height: var(--type-h6-line); letter-spacing: var(--type-h6-track); margin: 0; color: var(--fg-heading); }
+
+p { font-family: var(--type-body1-font); font-size: var(--type-body1-size); line-height: var(--type-body1-line); letter-spacing: var(--type-body1-track); margin: 0; color: var(--fg-primary); }
+
+small, .t-body2 { font-family: var(--type-body2-font); font-size: var(--type-body2-size); line-height: var(--type-body2-line); letter-spacing: var(--type-body2-track); }
+.t-caption { font-family: var(--type-caption-font); font-weight: var(--type-caption-weight); font-size: var(--type-caption-size); line-height: var(--type-caption-line); letter-spacing: var(--type-caption-track); color: var(--fg-secondary); }
+.t-overline { font-family: var(--type-overline-font); font-size: var(--type-overline-size); letter-spacing: var(--type-overline-track); text-transform: uppercase; color: var(--fg-secondary); }
+.t-button { font-family: var(--type-button-font); font-weight: var(--type-button-weight); font-size: var(--type-button-size); line-height: var(--type-button-line); letter-spacing: var(--type-button-track); }
+
+/* Material Symbols default size */
+.material-symbols-rounded {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+  font-size: 24px;
+  line-height: 1;
+}

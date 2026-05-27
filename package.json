@@ -1,0 +1,16 @@
+{
+  "name": "navigate-ai-strategy",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/check-content.mjs && astro build",
+    "preview": "astro preview",
+    "lint:content": "node scripts/check-content.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "@astrojs/mdx": "^4.0.0"
+  }
+}

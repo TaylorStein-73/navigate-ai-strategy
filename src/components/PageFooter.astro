@@ -1,0 +1,47 @@
+---
+---
+
+<footer class="page-footer">
+  <div class="page-footer-inner">
+    <p>
+      Internal — not for external distribution. Companion vision document
+      covers the AI Coordinator experience in depth.
+    </p>
+    <p class="back"><a href="/">↑ Return to contents</a></p>
+  </div>
+</footer>
+
+<style>
+  .page-footer {
+    padding: 64px 0 64px;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: var(--fg-secondary);
+  }
+  .page-footer-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-inline: var(--space-8);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  .page-footer p { margin: 0; max-width: 60ch; }
+  .page-footer a { color: var(--fg-secondary); border-bottom: 1px solid transparent; }
+  .page-footer a:hover { color: var(--fg-heading); border-bottom-color: currentColor; }
+
+  @media (max-width: 640px) {
+    .page-footer-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      padding-inline: var(--space-6);
+    }
+  }
+
+  @media print {
+    .page-footer { color: black; }
+    .back { display: none; }
+  }
+</style>

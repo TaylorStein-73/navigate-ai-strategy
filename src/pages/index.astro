@@ -1,0 +1,247 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageFooter from "../components/PageFooter.astro";
+import { getOrderedSections, routeFor } from "../lib/sections";
+
+const sections = await getOrderedSections();
+
+const title = "Navigate AI Strategy";
+const description =
+  "The agentic platform for Patient Journey Management. The internal AI strategy for Navigate — read in cascade order, each section a different lens on how AI shows up in the product.";
+
+const shapeLabels: Record<string, string> = {
+  manifesto: "Manifesto",
+  triptych: "Triptych",
+  "stacked-moats": "Stacked moats",
+  "system-diagram": "System diagram",
+  timeline: "Timeline",
+};
+---
+
+<Layout title={title} description={description} atmosphere="default">
+  <main class="landing">
+    <header class="cover">
+      <img class="cover-mark" src="/brand/mark-tidal.svg" alt="" aria-hidden="true" width="56" height="54" />
+      <p class="kicker">Internal Strategy · Draft v1</p>
+      <h1 class="title">
+        Navigate AI <span class="accent">Strategy</span>
+      </h1>
+      <p class="byline">
+        <span><em>Owner</em> Taylor Stein</span>
+        <span><em>Updated</em> April 24, 2026</span>
+        <span><em>Read</em> 12 minutes</span>
+      </p>
+
+      <p class="thesis">
+        The strategy below is a reasoning system. Read it in order — each part depends
+        on the one before. Five sections, five shapes, one platform.
+      </p>
+    </header>
+
+    <nav class="toc" aria-label="Strategy contents">
+      <p class="toc-label">Contents</p>
+      <div class="toc-grid">
+        {sections.map((s) => (
+          <a class="toc-item" href={routeFor(s)}>
+            <div class="toc-num">{String(s.order).padStart(2, "0")}</div>
+            <h2 class="toc-title">{s.title}</h2>
+            <p class="toc-summary">{s.summary}</p>
+            <p class="toc-shape">{shapeLabels[s.treatment]}</p>
+          </a>
+        ))}
+      </div>
+    </nav>
+
+    <PageFooter />
+  </main>
+</Layout>
+
+<style>
+  .landing {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ============ COVER ============ */
+  .cover {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 96px var(--space-8) 64px;
+    width: 100%;
+  }
+
+  .cover-mark {
+    display: block;
+    width: 56px;
+    height: auto;
+    margin: 0 0 var(--space-8) 0;
+  }
+
+  .kicker {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-6) 0;
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 144, "wght" 500;
+    font-size: clamp(3rem, 8vw, 6rem);
+    letter-spacing: -0.035em;
+    line-height: 0.94;
+    margin: 0 0 var(--space-8) 0;
+    color: var(--fg-heading);
+    max-width: 16ch;
+  }
+  .title .accent {
+    color: var(--brand-primary);
+  }
+
+  .byline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    font-family: var(--font-sans);
+    font-size: 1.02rem;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-12) 0;
+  }
+  .byline em {
+    color: var(--fg-primary);
+    font-style: normal;
+    font-weight: 500;
+    margin-right: 0.4em;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .thesis {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 48, "wght" 400;
+    font-style: italic;
+    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+    line-height: 1.35;
+    color: var(--fg-primary);
+    max-width: 50ch;
+    margin: 0;
+    padding-left: var(--space-6);
+    border-left: 2px solid var(--brand-primary);
+  }
+
+  /* ============ TABLE OF CONTENTS ============ */
+  .toc {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: var(--space-12) var(--space-8) 64px;
+    width: 100%;
+    flex: 1;
+  }
+  .toc-label {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-4) 0;
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-bottom: 1px solid var(--border-strong);
+  }
+
+  .toc-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-8) var(--space-4) var(--space-8);
+    border-right: 1px solid var(--border-soft);
+    color: var(--fg-heading);
+    transition: background var(--d-short) var(--ease-out);
+    text-decoration: none;
+    border-bottom: none;
+    position: relative;
+    min-height: 240px;
+  }
+  .toc-item:last-child { border-right: none; }
+  .toc-item:hover { background: var(--brand-secondary); }
+  .toc-item:hover .toc-num { color: var(--brand-primary); }
+  .toc-item:focus-visible {
+    outline: 2px solid var(--brand-primary);
+    outline-offset: -2px;
+    background: var(--brand-secondary);
+  }
+
+  .toc-num {
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    color: var(--fg-secondary);
+    letter-spacing: 0.1em;
+    transition: color var(--d-short) var(--ease-out);
+  }
+  .toc-title {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 36, "wght" 500;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: var(--space-2) 0 var(--space-3) 0;
+    color: var(--fg-heading);
+  }
+  .toc-summary {
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--fg-primary);
+    margin: 0 0 auto 0;
+    flex: 1;
+  }
+  .toc-shape {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: var(--space-4) 0 0 0;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-soft);
+  }
+  .toc-item:hover .toc-shape { color: var(--brand-primary); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 1024px) {
+    .toc-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .toc-item {
+      border-bottom: 1px solid var(--border-soft);
+      min-height: 200px;
+    }
+    .toc-item:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 640px) {
+    .cover { padding: 64px var(--space-6) var(--space-8); }
+    .toc { padding: var(--space-6) var(--space-6) var(--space-12); }
+    .toc-grid { grid-template-columns: 1fr; }
+    .toc-item {
+      border-right: none;
+      border-bottom: 1px solid var(--border-soft);
+      min-height: 160px;
+    }
+    .toc-item:last-child { border-bottom: none; }
+    .byline { gap: var(--space-4); font-size: 0.95rem; }
+  }
+
+  @media print {
+    .toc-item { break-inside: avoid; }
+  }
+</style>

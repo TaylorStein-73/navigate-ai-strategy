@@ -1,0 +1,151 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Masthead from "../components/Masthead.astro";
+import PrevNextNav from "../components/PrevNextNav.astro";
+import PageFooter from "../components/PageFooter.astro";
+import { getSectionByOrder } from "../lib/sections";
+
+const section = await getSectionByOrder(1);
+if (!section) throw new Error("Vision section not found");
+
+const description = section.summary;
+const argParas = section.argument.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+const evParas = section.evidence.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+---
+
+<Layout title={`${section.title} — Navigate AI Strategy`} description={description} atmosphere={section.atmosphere} position={section.order}>
+  <Masthead variant="inner" position={section.order} total={5} />
+
+  <article class="manifesto">
+    <div class="manifesto-inner">
+      <p class="section-numeral">{String(section.order).padStart(2, "0")} · {section.title}</p>
+
+      <h1 class="manifesto-title">
+        Navigate is the agentic platform for <span class="italic">Patient Journey Management</span>.
+      </h1>
+
+      <p class="manifesto-sub">{section.summary}</p>
+
+      <div class="prose">
+        {argParas.map((p, i) => (
+          i === 0 ? (
+            <p class="lede"><span class="dropcap">{p.charAt(0)}</span>{p.slice(1)}</p>
+          ) : (
+            <p set:html={p.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")} />
+          )
+        ))}
+      </div>
+
+      <section class="evidence">
+        <h2 class="evidence-heading">Evidence</h2>
+        {evParas.map(p => (
+          <p set:html={p.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")} />
+        ))}
+      </section>
+    </div>
+  </article>
+
+  <PrevNextNav order={section.order} />
+  <PageFooter />
+</Layout>
+
+<style>
+  .manifesto-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 96px var(--space-8) 64px;
+  }
+
+  .section-numeral {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-12) 0;
+  }
+
+  .manifesto-title {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 144, "wght" 500;
+    font-size: clamp(2.5rem, 6.5vw, 4.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+    margin: 0 0 var(--space-8) 0;
+    color: var(--fg-heading);
+  }
+  .manifesto-title .italic {
+    font-style: italic;
+    font-variation-settings: "opsz" 144, "wght" 400;
+    color: var(--brand-primary);
+  }
+
+  .manifesto-sub {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 36, "wght" 400;
+    font-style: italic;
+    font-size: 1.35rem;
+    line-height: 1.4;
+    color: var(--fg-primary);
+    max-width: 56ch;
+    margin: 0 0 64px 0;
+    padding-bottom: var(--space-8);
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .prose {
+    font-family: var(--font-sans);
+    font-size: 1.12rem;
+    line-height: 1.7;
+    color: var(--fg-heading);
+    max-width: 60ch;
+  }
+  .prose p { margin: 0 0 var(--space-6) 0; }
+  .prose p.lede { font-size: 1.18rem; }
+  .prose strong { font-weight: 600; color: var(--fg-heading); }
+
+  .dropcap {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 96, "wght" 500;
+    font-size: 4.2rem;
+    line-height: 0.85;
+    float: left;
+    margin: 0.1em 0.12em -0.1em 0;
+    color: var(--brand-primary);
+  }
+
+  .evidence {
+    margin-top: 64px;
+    padding: var(--space-8) var(--space-8) var(--space-6) var(--space-8);
+    background: var(--surface-page);
+    border-left: 2px solid var(--border-strong);
+  }
+  .evidence-heading {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-4) 0;
+    font-weight: 500;
+  }
+  .evidence p {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--fg-primary);
+    margin: 0 0 var(--space-4) 0;
+  }
+  .evidence p:last-child { margin-bottom: 0; }
+
+  @media (max-width: 640px) {
+    .manifesto-inner { padding: var(--space-12) var(--space-6) var(--space-8); }
+    .dropcap { font-size: 3.2rem; }
+    .evidence { padding: var(--space-6); }
+  }
+
+  @media print {
+    .manifesto-title { font-size: 36pt; }
+    .evidence { break-inside: avoid; background: white; }
+  }
+</style>

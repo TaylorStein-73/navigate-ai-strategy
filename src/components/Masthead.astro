@@ -1,0 +1,137 @@
+---
+interface Props {
+  variant?: "home" | "inner";
+  position?: number;
+  total?: number;
+}
+const { variant = "home", position, total = 5 } = Astro.props;
+---
+
+<header class={`masthead ${variant}`}>
+  <div class="masthead-inner">
+    <a class="brand-row" href="/" aria-label="Return to contents">
+      {variant === "home" ? (
+        <img class="mark" src="/brand/mark-tidal.svg" alt="" aria-hidden="true" width="36" height="34" />
+      ) : (
+        <img class="wordmark" src="/brand/logo-engagedmd.svg" alt="EngagedMD" width="120" height="20" />
+      )}
+    </a>
+
+    <p class="t-overline kicker">Internal Strategy · Draft v1</p>
+
+    {variant === "inner" && (
+      <p class="position" aria-label={`Section ${position} of ${total}`}>
+        <span class="num">{String(position ?? 0).padStart(2, "0")}</span>
+        <span class="sep">/</span>
+        <span class="of">{String(total).padStart(2, "0")}</span>
+      </p>
+    )}
+
+    <a class="brand" href="/" aria-label="Return to contents">
+      <span>Navigate AI</span> <span class="accent">Strategy</span>
+    </a>
+
+    {variant === "home" && (
+      <p class="meta t-overline">
+        Owner: Taylor Stein &nbsp;·&nbsp; Updated April 24, 2026
+      </p>
+    )}
+  </div>
+</header>
+
+<style>
+  .masthead {
+    border-bottom: 1px solid var(--border-soft);
+    padding-block: var(--space-8) var(--space-6);
+  }
+  .masthead.home {
+    padding-block: var(--space-10) var(--space-8);
+  }
+
+  .masthead-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-inline: var(--space-8);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "logo position"
+      "kicker kicker"
+      "brand brand"
+      "meta meta";
+    column-gap: var(--space-4);
+    row-gap: var(--space-2);
+    align-items: center;
+  }
+
+  .brand-row {
+    grid-area: logo;
+    color: var(--brand-primary);
+    border-bottom: none;
+    display: inline-flex;
+    align-items: center;
+    line-height: 0;
+  }
+  .brand-row:hover { border-bottom: none; }
+  .mark {
+    width: 36px;
+    height: auto;
+    display: block;
+  }
+  /* mark-tidal.svg uses fill="currentColor" — color from parent .brand-row */
+  .mark { filter: none; }
+
+  .wordmark {
+    height: 22px;
+    width: auto;
+    display: block;
+  }
+
+  .kicker {
+    grid-area: kicker;
+    margin: var(--space-2) 0 0 0;
+  }
+
+  .position {
+    grid-area: position;
+    justify-self: end;
+    font-family: var(--font-sans);
+    font-size: var(--type-body2-size);
+    letter-spacing: 0.06em;
+    color: var(--fg-secondary);
+    margin: 0;
+  }
+  .position .num { color: var(--brand-primary); font-weight: 600; }
+  .position .sep { margin-inline: 0.3em; opacity: 0.5; }
+
+  .brand {
+    grid-area: brand;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.8rem, 3vw, 2.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--fg-heading);
+    border-bottom: none;
+    margin-top: var(--space-2);
+  }
+  .brand:hover { border-bottom: none; }
+  .brand .accent { color: var(--brand-primary); }
+
+  .meta {
+    grid-area: meta;
+    margin: var(--space-2) 0 0 0;
+  }
+
+  @media (max-width: 640px) {
+    .masthead-inner { padding-inline: var(--space-6); }
+    .wordmark { height: 18px; }
+  }
+
+  @media print {
+    .position { display: none; }
+  }
+</style>
+
+<!-- Color the SVG mark via currentColor — mark-tidal.svg has fill="currentColor".
+     Tint the brand-row container teal so the wave inherits. -->

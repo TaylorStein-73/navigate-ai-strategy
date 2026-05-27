@@ -1,0 +1,163 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "../styles/engagedmd-tokens.css";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Atmosphere tint key — sets the page background subtly via color-mix from EngagedMD brand tokens. */
+  atmosphere?: "default" | "vision" | "who" | "differentiators" | "foundations" | "execution";
+  /** Cascade position for inner pages, used by chrome. */
+  position?: number;
+}
+const { title, description, atmosphere = "default", position } = Astro.props;
+
+const ogImage = new URL("/og-image.svg", Astro.site ?? "http://localhost").toString();
+
+const atmosphereClass = `atmos-${atmosphere}`;
+---
+
+<!doctype html>
+<html lang="en" class={atmosphereClass} data-position={position}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  /*
+   * Navigate AI Strategy — EngagedMD Tidal Design System rebrand
+   * Memorable thing: "this is a system, not a checklist"
+   * Tokens come from src/styles/engagedmd-tokens.css. Brand rules in DESIGN.md.
+   *
+   * Brand-critical (enforced):
+   *  • No emoji, no purple #9747FF, no invented gradients.
+   *  • Magenta #DF499F reserved for active-nav indicator + unread-message dot only.
+   *  • Cards: 16px radius, 1px divider stroke, --shadow-e1. No colored left-border accents.
+   *  • Sentence case everywhere except eyebrow/overline + tab labels (ALL CAPS + letter-spacing).
+   */
+  :root {
+    /* App-specific extensions on top of the EngagedMD token set. */
+    /* Per-page atmosphere tints, derived from brand tokens. */
+    --atmos-default:        var(--surface-app);
+    --atmos-vision:         color-mix(in srgb, var(--surface-app) 80%, var(--brand-secondary) 20%);
+    --atmos-who:            var(--surface-app);
+    --atmos-differentiators: color-mix(in srgb, var(--surface-app) 97%, var(--brand-primary) 3%);
+    --atmos-foundations:    color-mix(in srgb, var(--surface-app) 94%, var(--brand-primary) 6%);
+    --atmos-execution:      color-mix(in srgb, var(--surface-app) 90%, var(--brand-secondary) 10%);
+
+    /* Motion (V2 kept). */
+    --d-micro: 80ms;
+    --d-short: 200ms;
+    --d-medium: 240ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    background: var(--atmos-default);
+    color: var(--fg-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    transition: background-color var(--d-medium) var(--ease-out);
+  }
+
+  /* Per-page atmosphere */
+  html.atmos-vision           { background: var(--atmos-vision); }
+  html.atmos-who              { background: var(--atmos-who); }
+  html.atmos-differentiators  { background: var(--atmos-differentiators); }
+  html.atmos-foundations      { background: var(--atmos-foundations); }
+  html.atmos-execution        { background: var(--atmos-execution); }
+  html.atmos-default          { background: var(--atmos-default); }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: transparent; /* let html.atmos-* show through */
+  }
+
+  /* Links: brand-primary teal */
+  a {
+    color: var(--fg-link);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--d-micro) var(--ease-out);
+  }
+  a:hover { border-bottom-color: currentColor; }
+  a:focus-visible {
+    outline: 2px solid var(--brand-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Eyebrow / overline labels — used in mastheads, page numerals, section labels.
+     Sentence-case rule exception: these stay ALL CAPS with letterspacing. */
+  .t-overline {
+    font-family: var(--font-sans);
+    font-size: var(--type-overline-size);
+    font-weight: 500;
+    letter-spacing: var(--type-overline-track);
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) { animation: none !important; }
+  }
+
+  /* Print */
+  @media print {
+    html, body { background: white !important; color: black; }
+    a { color: black; border-bottom: none; }
+  }
+
+  /* Page-turn view transitions */
+  @keyframes nav-fade-in {
+    from { opacity: 0; transform: translateX(8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes nav-fade-out {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(-8px); }
+  }
+  ::view-transition-old(root) {
+    animation: nav-fade-out var(--d-medium) var(--ease-in) both;
+  }
+  ::view-transition-new(root) {
+    animation: nav-fade-in var(--d-medium) var(--ease-out) both;
+  }
+</style>

@@ -1,0 +1,102 @@
+---
+import { getPrevNext, routeFor } from "../lib/sections";
+
+interface Props {
+  order: number;
+}
+const { order } = Astro.props;
+const { prev, next } = await getPrevNext(order);
+---
+
+<nav class="prev-next" aria-label="Cascade navigation">
+  <div class="prev-next-inner">
+    {prev ? (
+      <a class="link prev" href={routeFor(prev)}>
+        <span class="dir">← Previous</span>
+        <span class="num">{String(prev.order).padStart(2, "0")}</span>
+        <span class="title">{prev.title}</span>
+      </a>
+    ) : (
+      <a class="link prev home" href="/">
+        <span class="dir">← Contents</span>
+        <span class="title">Home</span>
+      </a>
+    )}
+
+    {next ? (
+      <a class="link next" href={routeFor(next)}>
+        <span class="dir">Next →</span>
+        <span class="num">{String(next.order).padStart(2, "0")}</span>
+        <span class="title">{next.title}</span>
+      </a>
+    ) : (
+      <a class="link next home" href="/">
+        <span class="dir">Contents →</span>
+        <span class="title">Home</span>
+      </a>
+    )}
+  </div>
+</nav>
+
+<style>
+  .prev-next {
+    border-top: 1px solid var(--border-soft);
+    margin-top: 128px;
+    background-color: transparent;
+  }
+  .prev-next-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: var(--space-12) var(--space-8) var(--space-12);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+  }
+
+  .link {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-6);
+    border: 1px solid var(--border-soft);
+    background: transparent;
+    color: var(--fg-heading);
+    border-radius: 4px;
+    transition: background var(--d-short) var(--ease-out), border-color var(--d-short) var(--ease-out);
+  }
+  .link:hover {
+    background: var(--brand-secondary);
+    border-color: var(--brand-primary);
+    border-bottom: 1px solid var(--brand-primary);
+  }
+  .link.next { text-align: right; }
+
+  .dir {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+  }
+  .num {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    color: var(--fg-secondary);
+  }
+  .title {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 24, "wght" 500;
+    font-size: 1.2rem;
+    line-height: 1.15;
+  }
+
+  @media (max-width: 640px) {
+    .prev-next-inner {
+      grid-template-columns: 1fr;
+      padding-inline: var(--space-6);
+    }
+    .link.next { text-align: left; }
+  }
+
+  @media print { .prev-next { display: none; } }
+</style>
