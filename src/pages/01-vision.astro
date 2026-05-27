@@ -21,15 +21,16 @@ const evParas = section.evidence.split(/\n\n+/).map(p => p.trim()).filter(Boolea
       <p class="section-numeral">{String(section.order).padStart(2, "0")} · {section.title}</p>
 
       <h1 class="manifesto-title">
-        Navigate is the agentic platform for <span class="italic">Patient Journey Management</span>.
+        Every patient feels like the practice's <span class="italic">only</span> patient.
       </h1>
-
-      <p class="manifesto-sub">{section.summary}</p>
 
       <div class="prose">
         {argParas.map((p, i) => (
           i === 0 ? (
-            <p class="lede"><span class="dropcap">{p.charAt(0)}</span>{p.slice(1)}</p>
+            <p class="lede">
+              <span class="dropcap">{p.charAt(0)}</span>
+              <span set:html={p.slice(1).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")} />
+            </p>
           ) : (
             <p set:html={p.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")} />
           )
@@ -71,8 +72,11 @@ const evParas = section.evidence.split(/\n\n+/).map(p => p.trim()).filter(Boolea
     font-size: clamp(2.5rem, 6.5vw, 4.5rem);
     line-height: 0.98;
     letter-spacing: -0.025em;
-    margin: 0 0 var(--space-8) 0;
+    margin: 0 0 64px 0;
+    padding-bottom: var(--space-8);
+    border-bottom: 1px solid var(--border-soft);
     color: var(--fg-heading);
+    max-width: 22ch;
   }
   .manifesto-title .italic {
     font-style: italic;
